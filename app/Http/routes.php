@@ -17,6 +17,7 @@ Route::group(array('prefix'=>'admin','namespace'=>'Admin'),function(){
     Route::get('article/add',array('uses'=>'ArticleController@showAdd','as'=>'admin/article/add'));
     Route::get('article/modify',array('uses'=>'ArticleController@showModify','as'=>'admin/article/modify'));
     Route::post('article/add/post',array('uses'=>'ArticleController@add','as'=>'admin/article/add/post'));
+    Route::post('article/modify/post',array('uses'=>'ArticleController@modify','as'=>'admin/article/modify/post'));
     Route::post('article/delete/post',array('uses'=>'ArticleController@delete','as'=>'admin/article/delete/post'));
 
     Route::get('category/add',array('uses'=>'CategoryController@showAdd','as'=>'admin/category/add'));

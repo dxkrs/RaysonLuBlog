@@ -3,25 +3,31 @@
 use App\Http\Controllers\Controller;
 use App\Model\Category;
 use App\Model\Article;
-use Input,Validator;
-class ArticleController extends Controller{
+use Input, Validator, DB;
 
-    public function showGet(){
-        $getData = Article::select('id','title','is_showed')
-            ->orderBy('created_at','DESC')
+class ArticleController extends Controller
+{
+
+    //显示文章列表
+    public function showGet()
+    {
+        $getData = Article::select('id', 'title', 'is_showed')
+            ->orderBy('created_at', 'DESC')
             ->get()
             ->toArray();
 
         return view('admin.article.listArticle')->with(array('articleList'=>$getData));
     }
 
-    public function showModify(){
+    //显示文章修改页面
+    public function showModify()
+    {
         $id = Input::get('id');
         $validator = Validator::make(
             array('id'=>$id),
             array('id'=>'required|integer')
         );
-        if($validator->fails()){
+        if ($validator->fails()) {
             //todo:此处应为错误跳转
             return response()->json([
                 'data'=>false,
@@ -30,37 +36,40 @@ class ArticleController extends Controller{
         }
 
         $article = Article::find($id);
-        if(!$article){
+        if (!$article) {
             //todo:此处应为错误跳转
             return response()->json([
                 'data'=>false,
                 'msg'=>'无此文章！'
             ]);
         }
-        //ue.setContent({{isset($article)&&!empty($article['content'])?'htmldecode('.$article['content'].')':''}});
-       // $article->content = htmlspecialchars_decode($article->content);
-        //die(var_dump($article));
-        $getData = Category::select('id','category_name','as_name','parent_id')
+
+        $getData = Category::select('id', 'category_name', 'as_name', 'parent_id')
             ->get()
             ->toArray();
 
         $categoryList = tree($getData);
 
-        return view('admin.article.editArticle')->with(array('categoryList'=>$categoryList,'article'=>$article));
+        return view('admin.article.editArticle')->with(array('categoryList'=>$categoryList, 'article'=>$article));
 
 
     }
 
-    public function showAdd(){
-        $getData = Category::select('id','category_name','as_name','parent_id')
+    //显示文章添加页面
+    public function showAdd()
+    {
+        $getData = Category::select('id', 'category_name', 'as_name', 'parent_id')
             ->get()
             ->toArray();
 
         $categoryList = tree($getData);
         return view('admin.article.editArticle')->with(array('categoryList'=>$categoryList));
     }
-	public function add(){
-        $arrFilter = array('category_id','tag_id','cover_pic_id','title','content','desc','is_showed');
+
+    //添加文章操作
+    public function add()
+    {
+        $arrFilter = array('category_id', 'tag_id', 'cover_pic_id', 'title', 'content', 'desc', 'is_showed');
         $inputData = Input::only($arrFilter);
 
         $validator = Validator::make(
@@ -69,18 +78,18 @@ class ArticleController extends Controller{
                 'title'=>'required|max:255',
                 'cover_pic_id'=>'integer',
                 'is_showed'=>'required|boolean',
-                )
+            )
         );
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'data'=>false,
                 'msg'=>json_encode($validator->messages())
             ]);
         }
 
-        try{
+        try {
             Article::create($inputData);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'data'=>false,
                 'msg'=>json_encode($e->getMessage())
@@ -92,9 +101,58 @@ class ArticleController extends Controller{
             'msg'=>'成功添加文章！'
         ]);
 
-	}
+    }
 
-    public function delete(){
+    //修改文章操作
+    public function modify()
+    {
+        $arrFilter = array('id', 'category_id', 'tag_id', 'cover_pic_id', 'title', 'content', 'desc', 'is_showed');
+        $inputData = Input::only($arrFilter);
+
+        $validator = Validator::make(
+            $inputData,
+            array(
+                'id'=>'required|integer|exists:articles,id',
+                'category_id'=>'required|integer|exists:categories,id',
+                'title'=>'required|max:255',
+                'cover_pic_id'=>'integer',
+                'is_showed'=>'required|boolean',
+            )
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'data'=>false,
+                'msg'=>json_encode($validator->messages())
+            ]);
+        }
+
+        DB::beginTransaction();
+        try {
+            $article = Article::find($inputData['id']);
+            unset($inputData['id']);
+            foreach ($inputData as $k=>$v) {
+                $article[$k] = $v;
+            }
+            $article->save();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json([
+                'data'=>false,
+                'msg'=>json_encode($e->getMessage())
+            ]);
+        }
+
+        return response()->json([
+            'data'=>true,
+            'msg'=>'成功修改文章！'
+        ]);
+    }
+
+    //删除文章操作
+    public function delete()
+    {
         $id = Input::get('id');
 
         $validator = Validator::make(
@@ -102,17 +160,17 @@ class ArticleController extends Controller{
             array('id'=>'required|integer|exists:articles,id')
         );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'data'=>false,
                 'msg'=>json_encode($validator->messages())
             ]);
         }
 
-        try{
-            Article::where('id',$id)->delete();
+        try {
+            Article::where('id', $id)->delete();
             //Todo::delete other about this article!!!
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'data'=>false,
                 'msg'=>json_encode($e->getMessage())
