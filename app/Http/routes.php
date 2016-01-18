@@ -12,7 +12,7 @@
 */
 
 Route::group(array('prefix'=>'admin','namespace'=>'Admin'),function(){
-    Route::any('/',function(){return view('admin.article.listArticle');});
+    Route::any('/',array('uses'=>'ArticleController@showGet'));
     Route::get('article/get',array('uses'=>'ArticleController@showGet','as'=>'admin/article/get'));
     Route::get('article/add',array('uses'=>'ArticleController@showAdd','as'=>'admin/article/add'));
     Route::get('article/modify',array('uses'=>'ArticleController@showModify','as'=>'admin/article/modify'));

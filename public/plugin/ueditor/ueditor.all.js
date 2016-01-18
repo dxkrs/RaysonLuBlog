@@ -23120,6 +23120,8 @@ UE.plugins['customstyle'] = function() {
 };
 
 // plugins/catchremoteimage.js
+// http://images2015.cnblogs.com/blog/277258/201509/277258-20150909102748637-1594814030.jpg
+// ue.fireEvent("catchRemoteImage");
 ///import core
 ///commands 远程图片抓取
 ///commandsName  catchRemoteImage,catchremoteimageenable
@@ -23136,7 +23138,7 @@ UE.plugins['catchremoteimage'] = function () {
     me.setOpt({
         catchRemoteImageEnable: false
     });
-
+    alert('aa');
     me.addListener("afterpaste", function () {
         me.fireEvent("catchRemoteImage");
     });

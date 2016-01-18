@@ -240,8 +240,11 @@ class Uploader
             return;
         }
 
+
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
+        if (!file_exists($dirname)&& !mkdir($dirname, 0777, true)) {
+           // $this->recursive_mkdir($dirname);
+            //&& !mkdir($dirname, 0777, true)
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
@@ -257,6 +260,23 @@ class Uploader
         }
 
     }
+
+    //连续创建带层级的文件夹
+    function recursive_mkdir($folder){
+        $folder = preg_split( "/[\\\\\/]/" , $folder );
+        $mkfolder = '';
+        for($i=0; isset($folder[$i]); $i++){
+            if(!strlen(trim($folder[$i]))){
+                continue;
+            }
+            $mkfolder .= $folder[$i];
+            if(!is_dir($mkfolder)){
+                mkdir("$mkfolder",0777);
+            }
+            $mkfolder .= DIRECTORY_SEPARATOR;
+        }
+    }
+
 
     /**
      * 上传错误检查
