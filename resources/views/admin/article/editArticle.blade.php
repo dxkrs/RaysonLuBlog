@@ -2,7 +2,7 @@
 
 @section('head')
     <script type="text/javascript" src="{{asset('plugin/ueditor/ueditor.config.js')}}"></script>
-    <script type="text/javascript" src="{{asset('plugin/ueditor/ueditor.all.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('plugin/ueditor/ueditor.all.js')}}"></script>
 @stop
 
 @section('css')
@@ -77,10 +77,11 @@
 
         });
         $(function () {
+
             $('#submit').click(function () {
+                ue.fireEvent("catchRemoteImage");
                 var postData = $('#addArticleForm').serialize();
                 postData += "&_token={{ csrf_token() }}";
-
                 @if(isset($article['id']))
                 postData += "&id={{$article['id']}}";
                 $.ajax({

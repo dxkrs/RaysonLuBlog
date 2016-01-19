@@ -23138,7 +23138,7 @@ UE.plugins['catchremoteimage'] = function () {
     me.setOpt({
         catchRemoteImageEnable: false
     });
-    alert('aa');
+
     me.addListener("afterpaste", function () {
         me.fireEvent("catchRemoteImage");
     });

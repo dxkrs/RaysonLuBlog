@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50612
 File Encoding         : 65001
 
-Date: 2016-01-17 13:49:12
+Date: 2016-01-19 17:41:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,10 +20,9 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
-  `tag_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cover_pic_id` int(10) unsigned DEFAULT NULL,
+  `cover_pic_id` int(11) unsigned DEFAULT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `desc` text COLLATE utf8_unicode_ci,
@@ -37,10 +36,28 @@ CREATE TABLE `articles` (
 -- ----------------------------
 -- Records of articles
 -- ----------------------------
-INSERT INTO `articles` VALUES ('1', '1', '', null, 'test', '<p><em style=\"white-space: normal;\">te</em>st测<strong style=\"white-space: normal;\">试</strong></p>', '', '1', '2015-11-20 17:37:11', '2015-11-20 17:37:11', null);
-INSERT INTO `articles` VALUES ('2', '6', '1111', null, 'test2', '<p>test222222222<br/></p><p>22</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p>', 'testdesc', '1', '2015-11-20 17:38:25', '2015-11-20 17:38:25', null);
-INSERT INTO `articles` VALUES ('3', '6', 'ddddd', null, 'testsces', '<p>adfaawefasdfasdf</p><p>asfasd</p><p>asdfasd</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdfa</p><p>df</p>', 'asdfadsfadfasf', '1', '2015-11-20 18:19:32', '2015-11-20 18:19:32', null);
-INSERT INTO `articles` VALUES ('5', '6', 'ddddd', null, 'testsces', '<p>adfaawefasdfasdf</p><p>asfasd</p><p>asdfasd</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdfa</p><p>df</p>', 'asdfadsfadfasf', '1', '2015-11-20 18:20:26', '2015-11-20 18:20:26', null);
+INSERT INTO `articles` VALUES ('1', '1', null, 'test', '<p><em style=\"white-space: normal;\">te</em>st测<strong style=\"white-space: normal;\">试</strong></p>', '', '1', '2015-11-20 17:37:11', '2015-11-20 17:37:11', null);
+INSERT INTO `articles` VALUES ('2', '6', null, 'test2', '<p>test222222222<br/></p><p>22</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p>', 'testdesc', '1', '2015-11-20 17:38:25', '2015-11-20 17:38:25', null);
+INSERT INTO `articles` VALUES ('3', '6', null, 'testsces', '<p>adfaawefasdfasdf</p><p>asfasd</p><p>asdfasd</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdfa</p><p>df</p>', 'asdfadsfadfasf', '1', '2015-11-20 18:19:32', '2015-11-20 18:19:32', null);
+INSERT INTO `articles` VALUES ('5', '6', null, 'testsces', '<p style=\"line-height: 16px;\"><img style=\"vertical-align: middle; margin-right: 2px;\" src=\"http://www.rayson.com/plugin/ueditor/dialogs/attachment/fileTypeImages/icon_doc.gif\"/><a style=\"font-size:12px; color:#0066cc;\" href=\"/upload/file/u/20160119/1453176073124327.doc\" title=\"【客户端】入库管理ajax接口说明文档 .doc\">【客户端】入库管理ajax接口说明文档 .doc</a></p><p><br/></p>', 'asdfadsfadfasf', '1', '2015-11-20 18:20:26', '2016-01-19 04:01:18', null);
+
+-- ----------------------------
+-- Table structure for article_attributes
+-- ----------------------------
+DROP TABLE IF EXISTS `article_attributes`;
+CREATE TABLE `article_attributes` (
+  `id` int(11) NOT NULL,
+  `article_id` int(11) NOT NULL,
+  `attribute_name` varchar(64) NOT NULL,
+  `attribute_value` longtext,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of article_attributes
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for article_view

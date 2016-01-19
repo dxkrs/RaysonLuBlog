@@ -3,6 +3,7 @@
 use App\Http\Controllers\Controller;
 use App\Model\Category;
 use App\Model\Article;
+use App\Model\ArticleTag;
 use Input, Validator, DB;
 
 class ArticleController extends Controller

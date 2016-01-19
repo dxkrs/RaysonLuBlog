@@ -72,7 +72,7 @@
 
     /* 列出指定目录下的图片 */
     "imageManagerActionName": "listimage", /* 执行图片管理的action名称 */
-    "imageManagerListPath": "/img/", /* 指定要列出图片的目录 */
+    "imageManagerListPath": "/upload/img/u/", /* 指定要列出图片的目录 */
     "imageManagerListSize": 20, /* 每次列出文件数量 */
     "imageManagerUrlPrefix": "", /* 图片访问路径前缀 */
     "imageManagerInsertAlign": "none", /* 插入的图片浮动方式 */
@@ -80,7 +80,7 @@
 
     /* 列出指定目录下的文件 */
     "fileManagerActionName": "listfile", /* 执行文件管理的action名称 */
-    "fileManagerListPath": "/ueditor/php/upload/file/", /* 指定要列出文件的目录 */
+    "fileManagerListPath": "/upload/file/u/", /* 指定要列出文件的目录 */
     "fileManagerUrlPrefix": "", /* 文件访问路径前缀 */
     "fileManagerListSize": 20, /* 每次列出文件数量 */
     "fileManagerAllowFiles": [
