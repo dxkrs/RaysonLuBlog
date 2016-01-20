@@ -52,6 +52,18 @@ class ArticleController extends Controller
 
         $categoryList = tree($getData);
 
+        $arrTagIds = ArticleAttribute::where('article_id', $id)
+            ->where('attribute_key', 'tag_id')
+            ->lists('attribute_value')->toArray();
+        if (count($arrTagIds)) {
+            $arrTags = Tag::whereIn('id', $arrTagIds)->lists('name');
+            foreach($arrTags as $value){
+                $article['tags'] .= $value." ";
+            }
+
+            $article['tags'] = substr($article['tags'],0,strlen($article['tags'])-1);
+            //dd($article['tags']);
+        }
         return view('admin.article.editArticle')->with(array('categoryList' => $categoryList, 'article' => $article));
 
 
@@ -89,12 +101,15 @@ class ArticleController extends Controller
             ]);
         }
 
+        DB::beginTransaction();
         try {
             $article = Article::create($inputData);
             if ($tags != null) {
                 $this->saveTags($article->id, $tags);
             }
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'data' => false,
                 'msg' => json_encode($e->getMessage())
@@ -110,13 +125,14 @@ class ArticleController extends Controller
 
     protected function saveTags($id, $tags)
     {
-        $arrTags = explode(' ', $tags);
+        //获取标签数组，去重复
+        $arrTags = array_unique(explode(' ', $tags));
         if (count($arrTags)) {
             /*储存新的标签名*/
             //取出所有标签名
             $allTags = Tag::lists('name')->toArray();
             //比较获得新标签名
-            $newTags = array_diff($allTags, $arrTags);
+            $newTags = array_diff($arrTags, $allTags);
             //若有新标签则添加
             if (count($newTags)) {
                 foreach ($newTags as $tag) {
@@ -126,29 +142,33 @@ class ArticleController extends Controller
 
             /*建立文章与标签的关系*/
             //取出标签的id
-            $tagIds = Tag::whereIn('name', $arrTags)->pluck('id');
+            $tagIds = Tag::whereIn('name', $arrTags)->lists('id')->toArray();
             //取出已存在的关系
-            $allTagIds = ArticleAttribute::where('article', $id)
+            $allAttrTagIds = ArticleAttribute::where('article_id', $id)
                 ->where('attribute_key', 'tag_id')
-                ->pluck('attribute_value');
-            $newTagIds = array_diff($allTagIds, $tagIds);
-            if (count($newTagIds)) {
-                foreach ($newTagIds as $newTagId) {
+                ->lists('attribute_value')
+                ->toArray();
+            $newAttrTagIds = array_diff($tagIds, $allAttrTagIds);
+            if (count($newAttrTagIds)) {
+                foreach ($newAttrTagIds as $newAttrTagId) {
                     ArticleAttribute::create(array(
                         'article_id' => $id,
                         'attribute_key' => 'tag_id',
-                        'attribute_value' => $newTagId
+                        'attribute_value' => $newAttrTagId
                     ));
                 }
             }
+
+            /*对新建立*/
         }
     }
 
     //修改文章操作
     public function modify()
     {
-        $arrFilter = array('id', 'category_id', 'tag_id', 'cover_pic_id', 'title', 'content', 'desc', 'is_showed');
+        $arrFilter = array('id', 'category_id', 'cover_pic_id', 'title', 'content', 'desc', 'is_showed');
         $inputData = Input::only($arrFilter);
+        $tags = trim(Input::get('tags'));
 
         $validator = Validator::make(
             $inputData,
@@ -176,6 +196,9 @@ class ArticleController extends Controller
                 $article[$k] = $v;
             }
             $article->save();
+            if ($tags != null) {
+                $this->saveTags($article->id, $tags);
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

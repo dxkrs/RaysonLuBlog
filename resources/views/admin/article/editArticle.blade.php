@@ -50,8 +50,7 @@
 
         <div>
             <span>标签：</span>
-            <input type="text" {{isset($article)&&!empty($article['tag_id'])?'value='.$article['tag_id']:''}}
-                   name="tags"/>
+            <input type="text" name="tags" value="{{isset($article)&&!empty($article['tags'])?$article['tags']:''}}"/>
         </div>
 
         <div>
