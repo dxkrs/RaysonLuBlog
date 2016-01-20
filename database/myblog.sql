@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50612
 File Encoding         : 65001
 
-Date: 2016-01-19 17:41:49
+Date: 2016-01-20 17:33:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `articles` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of articles
@@ -40,6 +40,7 @@ INSERT INTO `articles` VALUES ('1', '1', null, 'test', '<p><em style=\"white-spa
 INSERT INTO `articles` VALUES ('2', '6', null, 'test2', '<p>test222222222<br/></p><p>22</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p><p>2</p>', 'testdesc', '1', '2015-11-20 17:38:25', '2015-11-20 17:38:25', null);
 INSERT INTO `articles` VALUES ('3', '6', null, 'testsces', '<p>adfaawefasdfasdf</p><p>asfasd</p><p>asdfasd</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdf</p><p>asdfa</p><p>df</p>', 'asdfadsfadfasf', '1', '2015-11-20 18:19:32', '2015-11-20 18:19:32', null);
 INSERT INTO `articles` VALUES ('5', '6', null, 'testsces', '<p style=\"line-height: 16px;\"><img style=\"vertical-align: middle; margin-right: 2px;\" src=\"http://www.rayson.com/plugin/ueditor/dialogs/attachment/fileTypeImages/icon_doc.gif\"/><a style=\"font-size:12px; color:#0066cc;\" href=\"/upload/file/u/20160119/1453176073124327.doc\" title=\"【客户端】入库管理ajax接口说明文档 .doc\">【客户端】入库管理ajax接口说明文档 .doc</a></p><p><br/></p>', 'asdfadsfadfasf', '1', '2015-11-20 18:20:26', '2016-01-19 04:01:18', null);
+INSERT INTO `articles` VALUES ('6', '6', null, 'aaa', '<p>aa<br/></p>', 'aa', '1', '2016-01-20 06:27:42', '2016-01-20 06:27:42', null);
 
 -- ----------------------------
 -- Table structure for article_attributes
@@ -48,8 +49,8 @@ DROP TABLE IF EXISTS `article_attributes`;
 CREATE TABLE `article_attributes` (
   `id` int(11) NOT NULL,
   `article_id` int(11) NOT NULL,
-  `attribute_name` varchar(64) NOT NULL,
-  `attribute_value` longtext,
+  `attribute_key` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `attribute_value` longtext CHARACTER SET utf8,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -64,8 +65,8 @@ CREATE TABLE `article_attributes` (
 -- ----------------------------
 DROP TABLE IF EXISTS `article_view`;
 CREATE TABLE `article_view` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) NOT NULL,
   `view_number` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -79,7 +80,7 @@ CREATE TABLE `article_view` (
 -- ----------------------------
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `as_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `parent_id` int(11) NOT NULL DEFAULT '0',
@@ -111,7 +112,7 @@ INSERT INTO `categories` VALUES ('9', 'test6', 'test6', '0', 'a', 'b', 'c', '201
 -- ----------------------------
 DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `use_number` int(11) DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -129,7 +130,7 @@ INSERT INTO `tags` VALUES ('1', 'testtag', '0', '2015-11-17 17:38:48', '2015-11-
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
