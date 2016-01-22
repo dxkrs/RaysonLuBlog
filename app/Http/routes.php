@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(array('prefix'=>'admin','namespace'=>'Admin'),function(){
+Route::group(array('prefix'=>'admin','namespace'=>'Admin','middleware'=>'csrf'),function(){
     Route::any('/',array('uses'=>'ArticleController@showGet'));
     Route::get('article/get',array('uses'=>'ArticleController@showGet','as'=>'admin/article/get'));
     Route::get('article/add',array('uses'=>'ArticleController@showAdd','as'=>'admin/article/add'));
@@ -27,6 +27,9 @@ Route::group(array('prefix'=>'admin','namespace'=>'Admin'),function(){
     Route::get('tag/add',array('uses'=>'TagController@showAdd','as'=>'admin/tag/add'));
     Route::post('tag/add',array('uses'=>'TagController@add','as'=>'admin/tag/add/post'));
     Route::get('tag/get',array('uses'=>'TagController@showGet','as'=>'admin/tag/get'));
+});
+Route::group(array('prefix'=>'admin','namespace'=>'Admin'),function(){
+    Route::post('test',array('uses'=>'CategoryController@delete','as'=>'admin/tag/delete/post'));
 });
 
 Route::get('/', 'WelcomeController@index');

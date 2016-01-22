@@ -7,6 +7,6 @@ class Tag extends Model {
 	//
 	protected $table = "tags";
 
-    protected $guarded = ['id','use_number','created_at','updated_at'];
+    protected $guarded = ['id','use_number'];
 
 }

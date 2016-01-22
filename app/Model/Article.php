@@ -5,10 +5,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model {
 
-	//
-	protected $table = "articles";
-	
-	use SoftDeletes;
+    use SoftDeletes;
+
+    protected $table = "articles";
+
 	protected $dates = ['deleted_at'];
-    protected $guarded = ['id','created_at','updated_at'];
+
+    protected $guarded = ['id'];
+
+    public function category(){
+        return $this->belongsTo('App\Model\Category','category_id','id');
+    }
 }

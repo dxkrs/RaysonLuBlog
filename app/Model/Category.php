@@ -4,8 +4,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model {
 
-	//
-	protected $table = "categories"; 
+	protected $table = "categories";
 
-    protected $guarded = ['id','created_at','updated_at'];
+    protected $guarded = ['id'];
+
+    public function article(){
+        return $this->hasMany('App\Model\Article','category_id','id');
+    }
+
 }
